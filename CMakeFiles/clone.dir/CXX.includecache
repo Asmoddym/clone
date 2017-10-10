@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/sylvain/Documents/projets/perso/C/clone/clone/CloningSystem.cpp
+iostream
+-
+CloningSystem.hpp
+/home/sylvain/Documents/projets/perso/C/clone/clone/CloningSystem.hpp
+
+/home/sylvain/Documents/projets/perso/C/clone/clone/CloningSystem.hpp
+map
+-
+string
+-
+
+/home/sylvain/Documents/projets/perso/C/clone/clone/main.cpp
+CloningSystem.hpp
+/home/sylvain/Documents/projets/perso/C/clone/clone/CloningSystem.hpp
+
