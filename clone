@@ -85,7 +85,6 @@ class Arguments
 
 	def useDefaultValuesIfNecessary(variable, value)
 		return true if !instance_variable_get("@#{variable}").nil?
-#		Warning.send("default_" << variable.to_s)
 		instance_variable_set("@#{variable}", value)
 	end
 
