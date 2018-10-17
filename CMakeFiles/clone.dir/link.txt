@@ -1,1 +1,0 @@
-/usr/bin/c++  -W -Wall -Wextra   CMakeFiles/clone.dir/main.cpp.o CMakeFiles/clone.dir/CloningSystem.cpp.o  -o clone 

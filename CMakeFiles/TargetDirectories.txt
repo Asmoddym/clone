@@ -1,3 +1,0 @@
-/home/sylvain/Documents/projets/perso/C/clone/clone/CMakeFiles/rebuild_cache.dir
-/home/sylvain/Documents/projets/perso/C/clone/clone/CMakeFiles/clone.dir
-/home/sylvain/Documents/projets/perso/C/clone/clone/CMakeFiles/edit_cache.dir
