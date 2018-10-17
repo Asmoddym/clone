@@ -1,0 +1,138 @@
+#!/usr/bin/ruby
+
+module CloningOptions
+	SITES = {
+		["-gl", "--gitlab"] => "https://www.gitlab.com",
+		["--github", "-g"] => "https://www.github.com",
+		["--epitech", "-e"] => "git@git.epitech.eu:"
+	}
+	DEFAULT_SITE = "https://www.github.com"
+
+	VCS = {
+		["--git"] => "git",
+		["--svn"] => "svn"
+	}
+	DEFAULT_VCS = "git"
+
+	def getSiteParameter(param)
+		SITES.each { |args, addr| 
+			return addr if args.include?(param)
+		}
+		false
+	end
+
+	def isSiteParameter(param)
+		SITES.each { |args, addr|
+			return true if args.include?(param)
+		}
+		false
+	end
+
+	def isParameter(param)
+		param.slice(0...1) == "-" || param.slice(0...2) == "--"
+	end
+
+	def self.help
+		puts "USAGE: #{__FILE__} [option...] username repository_name"
+		puts
+		puts "  SITE OPTIONS (optional, defaulting to '#{DEFAULT_SITE}'):"
+		SITES.each {|args, addr|
+			puts "    - #{args.to_s} search for repository_name in '#{addr}'"
+		}
+		puts
+		puts "  VCS OPTIONS (optional, default to '#{DEFAULT_VCS}'):"
+		VCS.each {|args, value|
+			puts "    - #{args.to_s} use '#{value}'"
+		}
+		1
+	end
+end
+
+class Warning
+	include CloningOptions
+	def self.default_site
+		puts "Warning: no site option given, using '#{DEFAULT_SITE}'"
+	end
+
+	def self.default_vcs
+		puts "Warning: no VCS given, using '#{DEFAULT_VCS}'"
+	end
+end
+
+class Arguments
+	include CloningOptions
+
+	attr_reader :site
+	attr_reader :user
+	attr_reader :repo
+	attr_reader :vcs
+
+	def initialize; end
+
+	def parse
+		ARGV.each { |arg|
+			if isParameter(arg)
+				return false if parseParameter(arg) == false
+			else 
+				return false if parseUserInfo(arg) == false
+			end			
+		}
+		return false if @user.nil? || @repo.nil?
+		useDefaultValuesIfNecessary(:site, DEFAULT_SITE)
+		useDefaultValuesIfNecessary(:vcs, DEFAULT_VCS)
+		true
+	end
+
+	def useDefaultValuesIfNecessary(variable, value)
+		return true if !instance_variable_get("@#{variable}").nil?
+#		Warning.send("default_" << variable.to_s)
+		instance_variable_set("@#{variable}", value)
+	end
+
+	def parseParameter(arg)
+		if isSiteParameter(arg) && @site.nil?
+			@site = getSiteParameter(arg)
+		else
+			return false
+		end
+		true
+	end
+
+	def parseUserInfo(arg)
+		if @user.nil? then @user = arg
+		elsif @repo.nil? then @repo = arg
+		else return false end	
+		true
+	end
+end
+
+class CloningSystem
+	def initialize; end
+
+	def clone(vcs, site, user, repo)
+		puts "Retrieving repository \"#{repo}\" of user \"#{user}\" using \"#{vcs}\" from \"#{site}\""
+		self.send("retrieveWith#{getCapitalizedVcs(vcs)}", site, user, repo)
+		0
+	end
+
+	private
+	def getCapitalizedVcs(var)
+		var[0] = var[0].capitalize
+		var
+	end
+
+	def retrieveWithGit(site, user, repo)
+		command = "git clone #{site}/#{user}/#{repo}"
+		puts ">> #{command}"
+		exec(command)
+	end
+
+	def retrieveWithSvn(site, user, repo)
+		raise Exception("Not implemented")
+	end
+end
+
+args = Arguments.new
+cloning = CloningSystem.new
+
+exit !args.parse ? CloningOptions.help : cloning.clone(args.vcs, args.site, args.user, args.repo)
