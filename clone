@@ -15,7 +15,7 @@ module CloningOptions
 	DEFAULT_VCS = "git"
 
 	def getSiteParameter(param)
-		SITES.each { |args, addr| 
+		SITES.each { |args, addr|
 			return addr if args.include?(param)
 		}
 		false
@@ -48,17 +48,6 @@ module CloningOptions
 	end
 end
 
-class Warning
-	include CloningOptions
-	def self.default_site
-		puts "Warning: no site option given, using '#{DEFAULT_SITE}'"
-	end
-
-	def self.default_vcs
-		puts "Warning: no VCS given, using '#{DEFAULT_VCS}'"
-	end
-end
-
 class Arguments
 	include CloningOptions
 
@@ -73,9 +62,9 @@ class Arguments
 		ARGV.each { |arg|
 			if isParameter(arg)
 				return false if parseParameter(arg) == false
-			else 
+			else
 				return false if parseUserInfo(arg) == false
-			end			
+			end
 		}
 		return false if @user.nil? || @repo.nil?
 		useDefaultValuesIfNecessary(:site, DEFAULT_SITE)
@@ -100,7 +89,7 @@ class Arguments
 	def parseUserInfo(arg)
 		if @user.nil? then @user = arg
 		elsif @repo.nil? then @repo = arg
-		else return false end	
+		else return false end
 		true
 	end
 end
